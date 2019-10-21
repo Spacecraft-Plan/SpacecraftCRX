@@ -64,9 +64,10 @@
 
 "content_scripts": [
   {
-    "matches": ["http://*.nytimes.com/*"],
-    "css": ["myStyles.css"],
-    "js": ["contentScript.js"]
+    // "matches": ["http://*.nytimes.com/*"],
+    "matches": [ "http://*/*", "https://*/*" ],
+    // "css": ["ContentScript.css"],
+    "js": ["jquery.min.js","contentscriptroot.js", "contentscripts.js"]
   }
 ]
  

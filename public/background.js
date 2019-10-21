@@ -54,16 +54,16 @@ chrome.runtime.onInstalled.addListener(function() {
 });
 
 // Events must be registered synchronously from the start of the page.
-chrome.bookmarks.onCreated.addListener(function() {
+// chrome.bookmarks.onCreated.addListener(function() {
   // do something
-});
+// });
 
 chrome.runtime.onMessage.addListener(function(message, callback) {
-  if (message.data == “setAlarm”) {
+  if (message.data == "setAlarm") {
     chrome.alarms.create({delayInMinutes: 5})
-  } else if (message.data == “runLogic”) {
+  } else if (message.data == "runLogic") {
     chrome.tabs.executeScript({file: 'logic.js'});
-  } else if (message.data == “changeColor”) {
+  } else if (message.data == "changeColor") {
     chrome.tabs.executeScript(
         {code: 'document.body.style.backgroundColor="orange"'});
   };

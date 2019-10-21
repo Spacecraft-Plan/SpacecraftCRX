@@ -7,6 +7,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const ManifestPlugin = require('webpack-manifest-plugin');
 const InterpolateHtmlPlugin = require('react-dev-utils/InterpolateHtmlPlugin');
+const FileManagerPlugin = require('filemanager-webpack-plugin');
 const SWPrecacheWebpackPlugin = require('sw-precache-webpack-plugin');
 const eslintFormatter = require('react-dev-utils/eslintFormatter');
 const ModuleScopePlugin = require('react-dev-utils/ModuleScopePlugin');
@@ -56,14 +57,18 @@ module.exports = {
   // You can exclude the *.map files from the build during deployment.
   devtool: shouldUseSourceMap ? 'source-map' : false,
   // In production, we only want to load the polyfills and the app code.
-  entry: [require.resolve('./polyfills'), paths.appIndexJs, paths.appIndexStyle],
+  entry: {
+    main:[require.resolve('./polyfills'), paths.appIndexJs, paths.appIndexStyle],
+    contentscripts:require.resolve('../contentscripts/index.js')
+  },
   output: {
     // The build folder.
     path: paths.appBuild,
     // Generated JS file names (with nested folders).
     // There will be one main bundle, and one file per asynchronous chunk.
     // We don't currently advertise code splitting but Webpack supports it.
-    filename: 'static/js/[name].[chunkhash:8].js',
+    // filename: 'static/js/[name].[chunkhash:8].js',
+    filename: 'static/js/[name].js',
     chunkFilename: 'static/js/[name].[chunkhash:8].chunk.js',
     // We inferred the "public path" (such as / or /my-project) from homepage.
     publicPath: publicPath,
@@ -126,7 +131,7 @@ module.exports = {
             loader: require.resolve('eslint-loader'),
           },
         ],
-        include: paths.appSrc,
+        include: [paths.appSrc,paths.contentscriptSrc],
       },
       {
         // "oneOf" will traverse all following loaders until one will
@@ -146,7 +151,7 @@ module.exports = {
           // Process JS with Babel.
           {
             test: /\.(js|jsx|mjs)$/,
-            include: paths.appSrc,
+            include: [paths.appSrc,paths.contentscriptSrc],
             loader: require.resolve('babel-loader'),
             options: {
               
@@ -238,6 +243,26 @@ module.exports = {
     ],
   },
   plugins: [
+    new FileManagerPlugin({
+      onEnd: [
+        {
+          move: [
+              // {source: './build/static/js/contentscripts.js', destination: './build/contentscripts.js'},
+          ]
+        },
+        {
+          copy: [
+            {source: './build/static/js/contentscripts.js', destination: './build/contentscripts.js'},
+            ]
+          },
+         {
+            delete: [
+              // require.resolve("../build/index.html")
+              // require.resolve('../build/static/js/contentscripts.fb28cc3a.js')
+            ]
+          }
+      ]
+  }),
     // Makes some environment variables available in index.html.
     // The public URL is available as %PUBLIC_URL% in index.html, e.g.:
     // <link rel="shortcut icon" href="%PUBLIC_URL%/favicon.ico">

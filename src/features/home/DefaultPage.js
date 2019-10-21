@@ -35,27 +35,19 @@ export class DefaultPage extends Component {
               </a>{' '}
               for this page.
             </li>
-            <li>
-              Edit component{' '}
-              <a
-                href="http://localhost:6076/element/src%2Ffeatures%2Fhome%2FApp.js/code"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                src/features/home/App.js
-              </a>{' '}
-              for the root container layout.
-            </li>
+
             <li>
               To see examples, access:&nbsp;
               <Link to="/examples">/examples</Link>
             </li>
             <li>
-              Rekit Studio is running at:&nbsp;
-              <a href="http://localhost:6076/" target="_blank" rel="noopener noreferrer">
-                http://localhost:6076/
-              </a>.
             </li>
+            <li>
+             <iframe
+    src="https://www.openstreetmap.org/export/embed.html?bbox=-0.004017949104309083%2C51.47612752641776%2C0.00030577182769775396%2C51.478569861898606&layer=mapnik">
+</iframe>
+            </li>
+
           </ul>
         </div>
       </div>

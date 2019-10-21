@@ -1,8 +1,16 @@
 {
   "short_name": "SCRX",
   "name": "SpacecraftCRX",
-  "description" : "spacecraft chrome extensions",
-  "permissions": ["contextMenus","activeTab","declarativeContent","storage","tabs"],
+  "description": "spacecraft chrome extensions",
+  "permissions": [
+    "contextMenus",
+    "activeTab",
+    "declarativeContent",
+    "storage",
+    "tabs",
+    "bookmarks",
+    "http://www.zhihu.com/"
+  ],
   "version": "1.0",
   "manifest_version": 2,
   // "icons": [
@@ -14,11 +22,11 @@
   // ],
   //  pick one:browser_action、page_action
   // "browser_action": {
-    // "default_title": "Press Ctrl(Win)/Command(Mac)+Shift+Right/Left to flip tabs",
+  // "default_title": "Press Ctrl(Win)/Command(Mac)+Shift+Right/Left to flip tabs",
   //   "default_popup": "index.html",
   //   "default_icon": "hello_extensions.png"
   // },
-   "page_action": {
+  "page_action": {
     "default_popup": "index.html"
     // "default_icon": {
     //   "16": "get_started16.png",
@@ -27,48 +35,62 @@
     //   "128": "get_started128.png"
     // }
   },
-  "options_page":"index.html",
+  // "app": {
+  //   "background": {
+  //     "scripts": ["background.js"]
+  //   }
+  // },
+  "options_page": "index.html",
   "background": {
     // "page": "background.html",
-    "scripts": ["background.js"],
+    "scripts": [
+      "background.js"
+    ],
     "persistent": false
     // "service_worker":
   },
   //Override  page
   "chrome_url_overrides": {
-    "newtab": "index.html"//bookmarks or history
- },
- "commands": {
-  "flip-tabs-forward": {
-    "suggested_key": {
-      "default": "Ctrl+Shift+Right",
-      "mac": "Command+Shift+Right"
-    },
-    "description": "Flip tabs forward"
+    "bookmarks": "index.html" //bookmarks or history
   },
-  "flip-tabs-backwards": {
-    "suggested_key": {
-      "default": "Ctrl+Shift+Left",
-      "mac": "Command+Shift+Left"
+  "commands": {
+    "flip-tabs-forward": {
+      "suggested_key": {
+        "default": "Ctrl+Shift+Right",
+        "mac": "Command+Shift+Right"
+      },
+      "description": "Flip tabs forward"
     },
-    "description": "Flip tabs backwards"
+    "flip-tabs-backwards": {
+      "suggested_key": {
+        "default": "Ctrl+Shift+Left",
+        "mac": "Command+Shift+Left"
+      },
+      "description": "Flip tabs backwards"
+    },
+    "_execute_browser_action": {
+      "suggested_key": {
+        "default": "Ctrl+Shift+F",
+        "mac": "MacCtrl+Shift+F"
+      },
+      "description": "Opens hello.html"
+    }
   },
-  "_execute_browser_action": {
-    "suggested_key": {
-      "default": "Ctrl+Shift+F",
-      "mac": "MacCtrl+Shift+F"
-    },
-    "description": "Opens hello.html"
-  }
-},
-
-"content_scripts": [
-  {
-    // "matches": ["http://*.nytimes.com/*"],
-    "matches": [ "http://*/*", "https://*/*" ],
-    // "css": ["ContentScript.css"],
-    "js": ["jquery.min.js","contentscriptroot.js", "contentscripts.js"]
-  }
-]
- 
+  "content_scripts": [
+    {
+      // "matches": ["http://*.nytimes.com/*"],
+      "matches": [
+        "http://*/*",
+        "https://*/*"
+      ],
+      "css": [
+        "contentscriptroot.css"
+      ],
+      "js": [
+        "jquery.min.js",
+        "contentscriptroot.js",
+        "contentscripts.js"
+      ]
+    }
+  ]
 }

@@ -1,6 +1,13 @@
 import React from 'react';
+import './DayStatistics.less';
+
 export default class DayStatistics extends React.Component {
     render() {
+        var Canvas = require('canvas');
+        var obelisk = require('obelisk.js')(Canvas);
+        
+
+
         return (
             <div className="ic-contributions-wrapper">
                <canvas id="isometric-contributions" width="720" height="410"></canvas>

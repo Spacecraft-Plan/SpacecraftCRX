@@ -1,5 +1,5 @@
 import React from 'react';
-import './toggle.less';//懒加载
+import './Toggle.less';//懒加载
 export default class Togggle extends React.Component {
     // constructor(props){
     //     super(props);

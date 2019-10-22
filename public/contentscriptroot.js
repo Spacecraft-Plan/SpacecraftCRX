@@ -1,4 +1,7 @@
-const cubeLocation = $('.js-calendar-graph');
+var cubeLocation = $('.js-calendar-graph');
+// var cubeLocation = $('.clearfix')
+// if(!cubeLocation){
+// }
 const toggleLocation = ($('.js-yearly-contributions')).find('h2');
 ($('<div id="js-calendar-cube"/>')).insertBefore(cubeLocation);
 

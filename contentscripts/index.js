@@ -17,18 +17,15 @@ export default class CalendarWrapper extends React.Component {
 }
 
 window.addEventListener('message', function (event) {
-    // var data = {};
-    // data.points = event.data.points;
-    // data.text = event.data.text;
-    // render(
-    //     <AppContainer>
-    //         <CalendarWrapper data={data} />
-    //     </AppContainer>
-    //     , document.getElementById('js-calendar-cube'));
+    render(
+        <AppContainer>
+            <CalendarWrapper data={event.data} />
+        </AppContainer>
+        , document.getElementById('js-calendar-cube'));
 
-    // render(
-    //     <AppContainer>
-    //         <Togggle />
-    //     </AppContainer>
-    //     , document.getElementById('js-toggle'));
-})
+    render(
+        <AppContainer>
+            <Togggle />
+        </AppContainer>
+        , document.getElementById('js-toggle'));
+});

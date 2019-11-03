@@ -1,7 +1,7 @@
 var cubeLocation = $('.js-calendar-graph');
-// var cubeLocation = $('.clearfix')
-// if(!cubeLocation){
-// }
+// var cubeLocation = $('.calendar')
+// var cubeLocation = $('.js-contrib-calendar');
+
 const toggleLocation = ($('.js-yearly-contributions')).find('h2');
 ($('<div id="js-calendar-cube"/>')).insertBefore(cubeLocation);
 
@@ -32,8 +32,84 @@ var GH_OFFSET = parseInt(((($('.js-calendar-graph-svg g > g'))[1].getAttribute('
 console.log("GH_OFFSET:" + GH_OFFSET);
 
 
-const MAX_HEIGHT=100;
-var data ={};
+const MAX_HEIGHT = 100;
+var data = {};
+
+var peakPoint = {
+    count: 0,
+    date: null,
+};
+
+var yearlyStatic = {
+    count: 0,
+    startDate: null,
+    endDate: null,
+};
+
+var tempStreak = {
+    length: 0,
+    startDate: null,
+    endDate: null,
+};
+var longestStreak = {
+    length: 0,
+    startDate: null,
+    endDate: null,
+};
+
+var days = $('.js-calendar-graph rect.day');
+days.each(function (d) {
+    const curCount = ($(this)).data('count');
+    yearlyStatic.count += curCount;
+    var day = ($(this)).data('date');
+    if (d === 0) {
+        yearlyStatic.startDate = day;
+    } else if (d === days.length - 1) {
+        yearlyStatic.endDate = day;
+    }
+    // Check for best day
+    if (curCount > peakPoint.count) {
+        peakPoint.date = day;
+        peakPoint.count = curCount;
+    }
+    // Check for longest streak
+    if (curCount > 0) {
+        if (tempStreak.length === 0) {
+            tempStreak.startDate = ($(this)).data('date');
+        }
+        tempStreak.length++;
+        if (tempStreak.length >= longestStreak.length) {
+            longestStreak.startDate = tempStreak.startDate;
+            longestStreak.endDate = ($(this)).data('date');
+            longestStreak.length = tempStreak.length;
+        }
+    } else {
+        tempStreak.length = 0;
+        tempStreak.startDate = null;
+        tempStreak.endDate = null;
+    }
+});
+var curStreak = {
+    length: 0,
+    startDate: null,
+    endDate: null,
+};
+
+// days = ($('.js-calendar-graph rect.day')).get().reverse();
+// curStreak.endDate = days[0].getAttribute('data-date');
+// for (let i, j = 0, len = days.length; j < len; i = ++j) {
+//     curStreak.length = parseInt(days[i].getAttribute('data-count'), 10);
+//     // If there's no activity today, continue on to yesterday
+//     if (i === 0 && curStreak.length === 0) {
+//         curStreak.endDate = days[1].getAttribute('data-date');
+//         continue;
+//     }
+//     if (curStreak.length > 0) {
+//         curStreak.length++;
+//         curStreak.startDate = days[i].getAttribute('data-date');
+//     }
+// }
+
 var points = [
     // [0, 0, 12, '#ebedf0'], [10, 0, 3, '#ebedf0'], [11, 0, 3, '#ffee4a'], [12, 0, 3, '#ffc501'], [15, 0, 9, '#ffc501'],
     // [0, 13], [10, 13], [11, 13], [12, 13],
@@ -43,66 +119,31 @@ var points = [
     // [0, 13 * 5], [10, 13 * 5], [11, 13 * 5], [12, 13 * 5],
     // [0, 13 * 6], [10, 13 * 6], [11, 13 * 6], [12, 13 * 6],
 ];
-var firstDay;
-var lastDay;
-var yearTotal;
-var peakPoint={
-    count:0
-};
-const  days = $('.js-calendar-graph rect.day');
-days.each(function(d) {
-        const curCount = ($(this)).data('count');
-        yearTotal += curCount;
-        var day = ($(this)).data('date');
-        if (d === 0) {
-          firstDay = day;
-        }else if (d === days.length - 1) {
-          lastDay = day;
-        }
-        // Check for best day
-        if (curCount > peakPoint.count) {
-          peakPoint.day = day;
-          peakPoint.count = curCount;
-        }
-        // Check for longest streak
-        // if (curCount > 0) {
-        //   if (tempStreak === 0) {
-        //     tempStreakStart = ($(this)).data('date');
-        //   }
-        //   tempStreak++;
-        //   if (tempStreak >= streakLongest) {
-        //     longestStreakStart = tempStreakStart;
-        //     longestStreakEnd = ($(this)).data('date');
-        //     return streakLongest = tempStreak;
-        //   }
-        // } else {
-        //   tempStreak = 0;
-        //   tempStreakStart = null;
-        //   return tempStreakEnd = null;
-        // }
-});
 
 ($('.js-calendar-graph-svg g > g')).each(function (g) {
     var x = parseInt(((($(this)).attr('transform')).match(/(\d+)/))[0] / (GH_OFFSET + 1));
     (($(this)).find('rect')).each(function (react) {
-        var point=[];
-        point[0]=x;
-        point[1]=parseInt((($(this)).attr('y')) / GH_OFFSET);
-        point[3]=($(this)).attr('fill');
+        var point = [];
+        point[0] = x;
+        point[1] = parseInt((($(this)).attr('y')) / GH_OFFSET);
+        point[3] = ($(this)).attr('fill');
         var contribCount = parseInt(($(this)).data('count'));
         var cubeHeight = 3;
         if (peakPoint.count > 0) {
             cubeHeight += parseInt(MAX_HEIGHT / peakPoint.count * contribCount);
         }
-        point[2]= cubeHeight;
-        
+        point[2] = cubeHeight;
+
         points.push(point);
     });
 });
 // console.info("points:"+points);
-data.points=points;
+data.points = points;
+data.longestStreak = longestStreak;
+data.curStreak = curStreak;
+data.yearlyStatic = yearlyStatic;
+data.peakPoint = peakPoint;
 
 
-
-data.type="from_page";
+data.type = "from_page";
 window.postMessage(data);

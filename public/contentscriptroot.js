@@ -45,7 +45,11 @@ var yearlyStatic = {
     startDate: null,
     endDate: null,
 };
-
+function clearTempStreak() {
+    tempStreak.length = 0;
+    tempStreak.startDate = null;
+    tempStreak.endDate = null;
+}
 var tempStreak = {
     length: 0,
     startDate: null,
@@ -57,7 +61,7 @@ var longestStreak = {
     endDate: null,
 };
 
-var days = $('.js-calendar-graph rect.day');
+const days = $('.js-calendar-graph rect.day');
 days.each(function (d) {
     const curCount = ($(this)).data('count');
     yearlyStatic.count += curCount;
@@ -84,31 +88,33 @@ days.each(function (d) {
             longestStreak.length = tempStreak.length;
         }
     } else {
-        tempStreak.length = 0;
-        tempStreak.startDate = null;
-        tempStreak.endDate = null;
+        clearTempStreak()
     }
 });
+
 var curStreak = {
     length: 0,
     startDate: null,
     endDate: null,
 };
 
-// days = ($('.js-calendar-graph rect.day')).get().reverse();
-// curStreak.endDate = days[0].getAttribute('data-date');
-// for (let i, j = 0, len = days.length; j < len; i = ++j) {
-//     curStreak.length = parseInt(days[i].getAttribute('data-count'), 10);
-//     // If there's no activity today, continue on to yesterday
-//     if (i === 0 && curStreak.length === 0) {
-//         curStreak.endDate = days[1].getAttribute('data-date');
-//         continue;
-//     }
-//     if (curStreak.length > 0) {
-//         curStreak.length++;
-//         curStreak.startDate = days[i].getAttribute('data-date');
-//     }
-// }
+const reversedays = ($('.js-calendar-graph rect.day')).get().reverse();
+curStreak.endDate = reversedays[0].getAttribute('data-date');
+for (let i = 0, len = reversedays.length; i < len; ++i) {
+    var count = parseInt(reversedays[i].getAttribute('data-count'), 10);
+    console.info("cjf" + curStreak.length);
+    // If there's no activity today, continue on to yesterday
+    if (i === 0 && count === 0) {
+        curStreak.endDate = reversedays[1].getAttribute('data-date');
+        continue;
+    }
+    if (count > 0) {
+        curStreak.length++;
+        curStreak.startDate = reversedays[i].getAttribute('data-date');
+    } else {
+        break;
+    }
+}
 
 var points = [
     // [0, 0, 12, '#ebedf0'], [10, 0, 3, '#ebedf0'], [11, 0, 3, '#ffee4a'], [12, 0, 3, '#ffc501'], [15, 0, 9, '#ffc501'],

@@ -28,15 +28,6 @@ export default class Calendar extends React.Component {
             year: "numeric"
         };
     }
-    getCurStreak() {
-        // if (curStreak.length > 0) {
-        //     curStreak.startDate = this.formatDateString(curStreak.startDate, dateOptions);
-        //     curStreak.endDate = this.formatDateString(curStreak.endDate, dateOptions);
-        //     curStreak.datesCurrent = curStreak.startDate + " — " + curStreak.endDate;
-        // } else {
-        //     curStreak.datesCurrent = "No current streak";
-        // }
-    }
     formatDateString(dateStr, options) {
         var date, dateParts;
         date = null;
@@ -46,9 +37,35 @@ export default class Calendar extends React.Component {
         }
         return date;
     }
+    datesDayDifference(dateStr1, dateStr2) {
+        var dateParts, timeDiff;
+        var diffDays = null;
+        var date1 = null;
+        var date2 = null;
+        if (dateStr1) {
+            dateParts = dateStr1.split('-');
+            date1 = new Date(dateParts[0], dateParts[1] - 1, dateParts[2], 0, 0, 0);
+        }
+        if (dateStr2) {
+            dateParts = dateStr2.split('-');
+            date2 = new Date(dateParts[0], dateParts[1] - 1, dateParts[2], 0, 0, 0);
+        }
+        if (dateStr1 && dateStr2) {
+            timeDiff = Math.abs(date2.getTime() - date1.getTime());
+            diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24));
+        }
+        return diffDays;
+    }
+    precisionRound(number, precision) {
+        var factor = Math.pow(10, precision);
+        return Math.round(number * factor) / factor;
+    }
     render() {
-        var longestStreakdescDate = this.formatDateString(this.state.longestStreak.startDate, this.dateOptions) + " — " + this.formatDateString(this.state.longestStreak.startDate, this.dateOptions);
+        var longestStreakdescDate = this.formatDateString(this.state.longestStreak.startDate, this.dateOptions) + " — " + this.formatDateString(this.state.longestStreak.endDate, this.dateOptions);
+        var curStreakdescDate = this.formatDateString(this.state.curStreak.startDate, this.dateOptions) + " — " + this.formatDateString(this.state.curStreak.endDate, this.dateOptions);
         var yearlyDescDate = this.formatDateString(this.state.yearlyStatic.startDate, this.dateWithYearOptions) + "-" + this.formatDateString(this.state.yearlyStatic.endDate, this.dateWithYearOptions);
+        var dayDifference = this.datesDayDifference(this.state.yearlyStatic.startDate, this.state.yearlyStatic.endDate);
+        var averageCount = this.precisionRound(this.state.yearlyStatic.count / dayDifference, 2);
         var busiestday = this.formatDateString(this.state.peakPoint.date, this.dateOptions)
 
         return (
@@ -64,7 +81,7 @@ export default class Calendar extends React.Component {
                         <span class="ic-stats-row">
                             <span class="ic-stats-label">1 year total
         <span class="ic-stats-count">{this.state.yearlyStatic.count}</span>
-                                <span class="ic-stats-average">1.24</span> per day
+                                <span class="ic-stats-average">{averageCount}</span> per day
       </span>
                             <span class="ic-stats-meta ic-stats-total-meta">
                                 <span class="ic-stats-unit">contributions</span>
@@ -97,11 +114,11 @@ export default class Calendar extends React.Component {
                         </span>
                         <span class="ic-stats-row">
                             <span class="ic-stats-label">Current streak
-        <span class="ic-stats-count">1</span>
+        <span class="ic-stats-count">{this.state.curStreak.length}</span>
                             </span>
                             <span class="ic-stats-meta">
                                 <span class="ic-stats-unit">days</span>
-                                <span class="ic-stats-date">Oct 21 — Oct 21</span>
+                                <span class="ic-stats-date">{curStreakdescDate ? curStreakdescDate : 'No current streak'}</span>
                             </span>
                         </span>
                     </span>
@@ -110,27 +127,4 @@ export default class Calendar extends React.Component {
 
         );
     }
-
-    componentDidMount() {
-        this.updateCanvas();
-    }
-    componentDidUpdate() {
-        this.updateCanvas();
-
-    }
-
-    updateCanvas() {
-        // const ctx = this.refs.canvas.getContext('2d');
-        // ctx.fillStyle='black';
-        // ctx.fillRect(0,0,this.state.width,this.state.height);
-        // var point;
-        // if (true) {
-        //     point = new obelisk.Point(70,70);
-        // } else {
-        //     point =new obelisk.Point(110,90);
-
-        // }
-        // var pixelView = new obelisk.PixelView(canvas, point);
-    }
-
 }

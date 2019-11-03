@@ -75,7 +75,7 @@ export default class Cube extends React.Component {
         pixelView.clear();
         this.state.points.forEach(element => {
             // console.info("element:" + element);
-            var p3d = new obelisk.Point3D(element[0] * this.state.size, element[1] * this.state.size, 0);
+            var p3d = new obelisk.Point3D(element[0] * this.state.size + 10, element[1] * this.state.size + 10, 0);
             var cubeColor = this.getCubeColor(element[3])
             var dimensionCube = new obelisk.CubeDimension(this.state.size, this.state.size, element[2]);
             var cube = new obelisk.Cube(dimensionCube, cubeColor, false);

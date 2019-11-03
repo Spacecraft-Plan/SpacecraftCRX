@@ -1,7 +1,7 @@
 var cubeLocation = $('.js-calendar-graph');
 // var cubeLocation = $('.calendar')
 // var cubeLocation = $('.js-contrib-calendar');
-
+console.info("cjf", cubeLocation);
 const toggleLocation = ($('.js-yearly-contributions')).find('h2');
 ($('<div id="js-calendar-cube"/>')).insertBefore(cubeLocation);
 
@@ -27,7 +27,6 @@ const toggleLocation = ($('.js-yearly-contributions')).find('h2');
 // var html = document.getElementById("div_id").innerHTML;
 // //再跟你想追加的代码加到一起插入div中
 // document.getElementById("div_id").innerHTML = html + "你想往div里追加的html代码";
-var column = [];
 var GH_OFFSET = parseInt(((($('.js-calendar-graph-svg g > g'))[1].getAttribute('transform')).match(/(\d+)/))[0] - 1);
 console.log("GH_OFFSET:" + GH_OFFSET);
 
@@ -102,7 +101,6 @@ const reversedays = ($('.js-calendar-graph rect.day')).get().reverse();
 curStreak.endDate = reversedays[0].getAttribute('data-date');
 for (let i = 0, len = reversedays.length; i < len; ++i) {
     var count = parseInt(reversedays[i].getAttribute('data-count'), 10);
-    console.info("cjf" + curStreak.length);
     // If there's no activity today, continue on to yesterday
     if (i === 0 && count === 0) {
         curStreak.endDate = reversedays[1].getAttribute('data-date');
